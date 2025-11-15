@@ -156,5 +156,6 @@ def plot_metric(metric_key):
 
 plot_metric("avg_current_A")
 plot_metric("avg_power_W")
+plot_metric("time_s")
 
 print(f"All figures saved for platform: {platform}")
