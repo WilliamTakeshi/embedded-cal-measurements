@@ -1,6 +1,15 @@
 import matplotlib.pyplot as plt
 import numpy as np
 
+plt.rcParams.update({
+    "axes.titlesize": 20,
+    "axes.labelsize": 18,
+    "xtick.labelsize": 16,
+    "ytick.labelsize": 16,
+    "legend.fontsize": 16,
+    "figure.titlesize": 22
+})
+
 def plot_flash_comparison(ops, flash_hw, flash_sw, title, output_file):
     x = np.arange(len(ops))
     width = 0.35
@@ -8,7 +17,7 @@ def plot_flash_comparison(ops, flash_hw, flash_sw, title, output_file):
     plt.figure(figsize=(10, 5))
 
     plt.bar(x - width/2, flash_hw, width, label="Hardware Accelerated")
-    plt.bar(x + width/2, flash_sw, width, label="Software Only")
+    plt.bar(x + width/2, flash_sw, width, label="RustCrypto")
 
     plt.xticks(x, ops)
     plt.ylabel("Flash (bytes)")
@@ -25,15 +34,15 @@ def plot_flash_comparison(ops, flash_hw, flash_sw, title, output_file):
 #############################################
 # Data generated using cargo size --release --bin "$BIN" -- -A | awk '/\.text|\.rodata|\.data/ {sum += strtonum($2)} END {print sum}'
 # where $BIN is the binary name
-ops = ["AES-ECB-128", "SHA2-256", "EC-MULT", "ECDSA-SIGN-VERIFY"]
-cracen_nrf = [7692, 8704, 13424, 19652]
-rustcrypto_nrf = [13368, 15276, 31920, 46824]
+ops = ["aes-128", "ec-mult", "ecdsa-sign-verify", "sha2-256"]
+cracen_nrf = [7692, 13424, 19652, 8704]
+rustcrypto_nrf = [13368, 31920, 46824, 15276]
 
 #############################################
 # Data for stm
 #############################################
-pac_stm = [7928, 7536, 8688, 10040]
-rustcrypto_stm = [13340, 15908, 28176, 47044]
+pac_stm = [7928, 8688, 10040, 7536]
+rustcrypto_stm = [13340, 28176, 47044, 15908]
 
 #############################################
 # Generate both plots

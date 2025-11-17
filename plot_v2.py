@@ -127,6 +127,8 @@ plt.close()
 def plot_metric(metric_key):
     label = results[metric_key]["label"]
     metric_data = results[metric_key]["values"]
+    metric_data = {k: metric_data[k] for k in sorted(metric_data)}
+
     
     ops = list(metric_data.keys())
     x = np.arange(len(ops))
@@ -140,13 +142,14 @@ def plot_metric(metric_key):
 
     fig, ax = plt.subplots(figsize=(10, 5))
     
-    ax.bar(x - width/2, hw_means, width, yerr=hw_errs, capsize=5, label="Hardware")
-    ax.bar(x + width/2, sw_means, width, yerr=sw_errs, capsize=5, label="Software")
+    ax.bar(x - width/2, hw_means, width, yerr=hw_errs, capsize=5, label="Hardware Accelerated")
+    ax.bar(x + width/2, sw_means, width, yerr=sw_errs, capsize=5, label="RustCrypto")
     
     ax.set_ylabel(label)
     ax.set_xticks(x)
     ax.set_xticklabels(ops)
-    ax.set_title(f"{label}: Hardware vs Software ({platform.upper()})")
+    pretty = lambda p: {"nrf": "nRF", "stm": "STM"}.get(p.lower(), p)
+    ax.set_title(f"{label}: RustCrypto vs Hardware Accelerated ({pretty(platform)})")
     ax.legend()
     
     plt.tight_layout()
